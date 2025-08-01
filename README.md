@@ -78,10 +78,10 @@ python3 graph.py
 
 The classifier categorizes emails into the following categories:
 
-- **PERSONAL**: Personal emails from friends and family
-- **WORK**: Work-related emails
-- **SCHOOL**: Educational emails
-- **PROMOTIONAL**: Marketing and promotional emails
-- **SOCIAL**: Social media notifications
-- **JOB_STATUS**: Job application updates
-- **OTHER**: Miscellaneous emails
+- PERSONAL
+- FINANCIAL
+- SCHOOL
+- TECH/DEVELOPMENT/SWE
+- SOCIAL
+- OTHER
+- JOB_APPLICATION/STATUS

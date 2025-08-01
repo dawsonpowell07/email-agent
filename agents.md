@@ -59,7 +59,7 @@ ruff .
 ruff format
 ```
 
-All code should be formatted with **Black** and pass **Ruff** linting.
+All code should be formatted and pass **Ruff** linting.
 
 ## Pull Request Requirements
 

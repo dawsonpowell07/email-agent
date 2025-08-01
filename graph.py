@@ -12,5 +12,3 @@ graph_builder.add_node("classifier", classifier_agent)
 graph_builder.add_edge(START, "summarizer")
 graph_builder.add_edge("summarizer", "classifier")
 graph_builder.add_edge("classifier", END)
-
-graph = graph_builder.compile()

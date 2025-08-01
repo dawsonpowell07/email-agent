@@ -1,8 +1,12 @@
-from graph import graph
+from graph import graph_builder
 import os
 import json
 import datetime
 import shutil
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 def run_for_user(token_path: str, user_name: str):
     """Run the email agent for a specific user with their token."""
@@ -18,7 +22,7 @@ def run_for_user(token_path: str, user_name: str):
     
     try:
         # Initialize the graph
-        app = graph
+        app = graph_builder # Add .compile() here
         
         # Run the email processing workflow
         final_state = app.invoke({
@@ -47,6 +51,12 @@ def run_for_user(token_path: str, user_name: str):
 def main():
     """Main function to run the email agent for multiple users."""
     print("🚀 Starting email agent for multiple users...")
+    
+    # Check if OpenAI API key is available
+    if not os.getenv("OPENAI_API_KEY"):
+        print("❌ Error: OPENAI_API_KEY environment variable not set")
+        print("Make sure to set the OPENAI_API_KEY environment variable or add it to your .env file")
+        return False
     
     # Define users and their token files
     users = [

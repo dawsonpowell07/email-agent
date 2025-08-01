@@ -6,7 +6,6 @@ import shutil
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
-load_dotenv()
 
 def run_for_user(token_path: str, user_name: str):
     """Run the email agent for a specific user with their token."""
@@ -51,6 +50,8 @@ def run_for_user(token_path: str, user_name: str):
 def main():
     """Main function to run the email agent for multiple users."""
     print("🚀 Starting email agent for multiple users...")
+    load_dotenv()
+
     
     # Check if OpenAI API key is available
     if not os.getenv("OPENAI_API_KEY"):

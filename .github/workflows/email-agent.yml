@@ -39,7 +39,6 @@ jobs:
       run: |
         echo "Checking environment variables:"
         echo "OPENAI_API_KEY is set: ${{ env.OPENAI_API_KEY != '' }}"
-        echo "OPENAI_API_KEY length: ${{ length(env.OPENAI_API_KEY) }}"
         
     - name: Run email agent
       run: |

@@ -18,7 +18,7 @@ def run_for_user(token_path: str, user_name: str):
     
     try:
         # Initialize the graph
-        app = graph.compile()
+        app = graph
         
         # Run the email processing workflow
         final_state = app.invoke({

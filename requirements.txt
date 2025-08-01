@@ -1,6 +1,7 @@
 langgraph
 langsmith
 langchain_openai
+dotenv
 openai
 google-api-python-client 
 google-auth-httplib2 

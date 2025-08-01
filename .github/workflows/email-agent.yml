@@ -9,6 +9,8 @@ on:
 jobs:
   run-email-agent:
     runs-on: ubuntu-latest
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
     
     steps:
     - name: Checkout code
@@ -33,16 +35,11 @@ jobs:
         echo '${{ secrets.TOKEN1_JSON }}' > token1.json
         echo '${{ secrets.TOKEN2_JSON }}' > token2.json
         
-    - name: Create .env file
-      run: |
-        echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" > .env
-        
     - name: Debug environment
       run: |
-        echo "Checking if .env file exists:"
-        ls -la .env
         echo "Checking environment variables:"
         echo "OPENAI_API_KEY is set: ${{ env.OPENAI_API_KEY != '' }}"
+        echo "OPENAI_API_KEY length: ${{ length(env.OPENAI_API_KEY) }}"
         
     - name: Run email agent
       run: |

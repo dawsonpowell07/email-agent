@@ -1,74 +1,40 @@
 from langchain_core.tools import tool
-from google.oauth2.credentials import Credentials
+from typing import List, Dict, Any, Optional
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
-import os.path
-from typing import List, Dict, Any
+from utils.auth import get_credentials, get_current_user
 
 
 @tool
-def get_emails(query: str = "is:unread") -> List[Dict[str, Any]]:
-    """
-    Retrieve emails from Gmail
-
-    Args:
-        max_results: Maximum number of emails to retrieve (default: 50)
-        query: Gmail search query (default: "is:unread" for unread emails)
-
-    Returns:
-        List of email data dictionaries
-    """
-    SCOPES = [
-        "https://www.googleapis.com/auth/gmail.labels",
-        "https://www.googleapis.com/auth/gmail.modify",
-    ]
-
-    # Get credentials
-    creds = None
-    if os.path.exists("token.json"):
-        creds = Credentials.from_authorized_user_file("token.json", SCOPES)
-
-    if not creds or not creds.valid:
-        return {"error": "Gmail not authenticated. Run gmail_authenticate first."}
+def get_emails(query: str = "is:unread", user_email: Optional[str] = None) -> List[Dict[str, Any]]:
+    """Retrieve emails from Gmail."""
+    if user_email is None:
+        user_email = get_current_user()
+    if not user_email:
+        return {"error": "User email not specified. Run gmail_authenticate first."}
 
     try:
-        # Build the Gmail service
+        creds = get_credentials(user_email)
         service = build("gmail", "v1", credentials=creds)
-
-        # Get messages
         results = (
-            service.users()
-            .messages()
-            .list(userId="me", q=query, maxResults=20)
-            .execute()
+            service.users().messages().list(userId="me", q=query, maxResults=20).execute()
         )
-
         messages = results.get("messages", [])
         emails = []
-
         for message in messages:
             msg = (
-                service.users()
-                .messages()
-                .get(userId="me", id=message["id"], format="full")
-                .execute()
+                service.users().messages().get(userId="me", id=message["id"], format="full").execute()
             )
-
-            # Extract headers
             headers = msg["payload"]["headers"]
             subject = next((h["value"] for h in headers if h["name"] == "Subject"), "")
             sender = next((h["value"] for h in headers if h["name"] == "From"), "")
-
             email_data = {
                 "id": message["id"],
                 "subject": subject,
                 "sender": sender,
                 "snippet": msg.get("snippet", ""),
             }
-
             emails.append(email_data)
-
         return emails
-
     except HttpError as error:
         return {"error": f"An error occurred: {error}"}

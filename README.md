@@ -14,7 +14,8 @@ An intelligent email classification and summarization agent built with LangGraph
 email-agent/
 ├── nodes/                 # LangGraph nodes
 │   ├── classifier.py      # Email classification agent
-│   └── summarizer.py      # Email summarization agent
+│   ├── summarizer.py      # Email summarization agent
+│   └── authenticator.py   # Node for loading credentials
 ├── tools/                 # LangChain tools
 │   ├── get_emails.py      # Tool to retrieve emails from Gmail
 │   ├── add_to_label.py    # Tool to add emails to Gmail labels
@@ -25,7 +26,6 @@ email-agent/
 ├── graph.py               # Main LangGraph workflow
 ├── state.py               # State definition for the graph
 ├── requirements.txt       # Python dependencies
-└── test_setup.py         # Setup verification script
 ```
 
 ## Setup
@@ -55,33 +55,14 @@ To use Gmail features, you need to set up authentication:
 3. Enable the Gmail API
 4. Create credentials (OAuth 2.0 Client ID)
 5. Download the credentials file and save it as `credentials.json` in the project root
+6. Generate a token for each Gmail account and save it as `token_<email>.json`
 
-### 4. Test Setup
+### Usage
 
-Run the test script to verify everything is working:
+Run the graph for a specific user email:
 
-## Usage
-
-### Basic Usage
-
-```
-langgraph dev
+```bash
+python run_graph.py
 ```
 
-OR
-
-```
-python3 graph.py
-```
-
-### Email Categories
-
-The classifier categorizes emails into the following categories:
-
-- PERSONAL
-- FINANCIAL
-- SCHOOL
-- TECH/DEVELOPMENT/SWE
-- SOCIAL
-- OTHER
-- JOB_APPLICATION/STATUS
+The `State` object now requires a `user_email` value. Credentials for that user are loaded from `token_<email>.json` and cached for future tool calls.

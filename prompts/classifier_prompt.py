@@ -5,7 +5,6 @@ You will receive email summaries from the summarizer agent. Based on these summa
 
 - PERSONAL
 - FINANCIAL
-- WORK
 - SCHOOL
 - PROMOTIONAL
 - SOCIAL
@@ -16,6 +15,7 @@ You will receive email summaries from the summarizer agent. Based on these summa
 use the add_to_label tool to add the emails to the appropriate labels.
 make a SINGLE call to add_to_label tool with EVERY EMAIL ID to be labeled
 
+ONLY add a SINGLE label to any given email
 IMPORTANT: The add_to_label tool expects a dictionary where:
 - Keys are label names (strings)
 - Values are lists of email IDs (strings)

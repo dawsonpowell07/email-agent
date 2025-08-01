@@ -3,7 +3,6 @@ from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 import os.path
-import base64
 from typing import List, Dict, Any
 
 
@@ -60,25 +59,11 @@ def get_emails(query: str = "is:unread") -> List[Dict[str, Any]]:
             subject = next((h["value"] for h in headers if h["name"] == "Subject"), "")
             sender = next((h["value"] for h in headers if h["name"] == "From"), "")
 
-            # Extract body
-            body = ""
-            if "parts" in msg["payload"]:
-                for part in msg["payload"]["parts"]:
-                    if part["mimeType"] == "text/plain":
-                        body = base64.urlsafe_b64decode(part["body"]["data"]).decode(
-                            "utf-8"
-                        )
-                        break
-            elif "body" in msg["payload"] and "data" in msg["payload"]["body"]:
-                body = base64.urlsafe_b64decode(msg["payload"]["body"]["data"]).decode(
-                    "utf-8"
-                )
-
             email_data = {
                 "id": message["id"],
                 "subject": subject,
                 "sender": sender,
-                "body": body,
+                "snippet": msg.get("snippet", ""),
             }
 
             emails.append(email_data)

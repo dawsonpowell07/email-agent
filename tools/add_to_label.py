@@ -12,7 +12,7 @@ def add_to_label(label_emails: Dict[str, List[str]]) -> str:
     Add emails to multiple Gmail labels
     
     Args:
-        label_emails: Dictionary where keys are label names and values are lists of email IDs
+        label_emails: Dictionary where keys are label names and values is a set of email IDs
         {
             "label_emails" {
                 "PERSONAL": ["email_id1", "email_id2", "email_id3"],

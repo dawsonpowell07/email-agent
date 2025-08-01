@@ -6,17 +6,26 @@ import os.path
 from typing import List, Dict
 
 
-# @tool
+@tool
 def add_to_label(label_emails: Dict[str, List[str]]) -> str:
     """
     Add emails to multiple Gmail labels
     
     Args:
         label_emails: Dictionary where keys are label names and values are lists of email IDs
+        {
+            "label_emails" {
+                "PERSONAL": ["email_id1", "email_id2", "email_id3"],
+                "WORK": ["email_id4", "email_id5", "email_id6"],
+                "SCHOOL": ["email_id7", "email_id8", "email_id9"],
+                "PROMOTIONAL": ["email_id10", "email_id11", "email_id12"]
+                }
+        }
     
     Returns:
         Success or error message
     """
+    
     SCOPES = [
         "https://www.googleapis.com/auth/gmail.labels",
         "https://www.googleapis.com/auth/gmail.modify",

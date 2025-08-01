@@ -4,12 +4,11 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 import os.path
 import base64
-import email
 from typing import List, Dict, Any
 
 
-# @tool
-def get_emails(max_results: int = 50, query: str = "is:unread") -> List[Dict[str, Any]]:
+@tool
+def get_emails(query: str = "is:unread") -> List[Dict[str, Any]]:
     """
     Retrieve emails from Gmail
 
@@ -41,7 +40,7 @@ def get_emails(max_results: int = 50, query: str = "is:unread") -> List[Dict[str
         results = (
             service.users()
             .messages()
-            .list(userId="me", q=query, maxResults=max_results)
+            .list(userId="me", q=query, maxResults=20)
             .execute()
         )
 
@@ -60,7 +59,6 @@ def get_emails(max_results: int = 50, query: str = "is:unread") -> List[Dict[str
             headers = msg["payload"]["headers"]
             subject = next((h["value"] for h in headers if h["name"] == "Subject"), "")
             sender = next((h["value"] for h in headers if h["name"] == "From"), "")
-            date = next((h["value"] for h in headers if h["name"] == "Date"), "")
 
             # Extract body
             body = ""
@@ -80,9 +78,7 @@ def get_emails(max_results: int = 50, query: str = "is:unread") -> List[Dict[str
                 "id": message["id"],
                 "subject": subject,
                 "sender": sender,
-                "date": date,
                 "body": body,
-                "snippet": msg.get("snippet", ""),
             }
 
             emails.append(email_data)

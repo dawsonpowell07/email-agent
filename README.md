@@ -64,15 +64,14 @@ Run the test script to verify everything is working:
 
 ### Basic Usage
 
-```python
-from graph import graph
-from state import State
+```
+langgraph dev
+```
 
-# Initialize the graph
-app = graph.compile()
+OR
 
-# Run the email processing workflow
-result = app.invoke({"messages": [{"role": "user", "content": "Process my emails"}]})
+```
+python3 graph.py
 ```
 
 ### Email Categories

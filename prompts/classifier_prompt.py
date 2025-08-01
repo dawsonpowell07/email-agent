@@ -6,7 +6,7 @@ You will receive email summaries from the summarizer agent. Based on these summa
 - PERSONAL
 - FINANCIAL
 - SCHOOL
-- PROMOTIONAL
+- TECH/DEVELOPMENT/SWE
 - SOCIAL
 - OTHER
 - JOB_APPLICATION/STATUS

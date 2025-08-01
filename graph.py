@@ -15,7 +15,12 @@ graph_builder.add_edge("classifier", END)
 
 graph = graph_builder.compile()
 
+# user_email = "dawsonpowell07@gmail.com"
+
 # for chunk in graph.stream(
-#     {"messages": [{"role": "user", "content": "classify my emails"}]}
+#     {
+#         "messages": [{"role": "user", "content": "classify my emails"}],
+#         "user_email": user_email,
+#     }
 # ):
 #     pretty_print_messages(chunk)

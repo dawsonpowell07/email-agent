@@ -10,7 +10,7 @@ from typing import List, Dict
 def add_to_label(label_emails: Dict[str, List[str]]) -> str:
     """
     Add emails to multiple Gmail labels
-    
+
     Args:
         label_emails: Dictionary where keys are label names and values is a set of email IDs
         {
@@ -21,11 +21,11 @@ def add_to_label(label_emails: Dict[str, List[str]]) -> str:
                 "PROMOTIONAL": ["email_id10", "email_id11", "email_id12"]
                 }
         }
-    
+
     Returns:
         Success or error message
     """
-    
+
     SCOPES = [
         "https://www.googleapis.com/auth/gmail.labels",
         "https://www.googleapis.com/auth/gmail.modify",

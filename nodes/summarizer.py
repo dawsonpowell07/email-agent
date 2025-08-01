@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from tools.get_emails import get_emails
 from tools.gmail_authenticate import gmail_authenticate
 from prompts.summarizer_prompt import summarizer_prompt
+
 load_dotenv()
 
 llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)

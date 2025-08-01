@@ -15,7 +15,7 @@ graph_builder.add_edge("classifier", END)
 
 graph = graph_builder.compile()
 
-for chunk in graph.stream(
-    {"messages": [{"role": "user", "content": "classify my emails"}]}
-):
-    pretty_print_messages(chunk)
+# for chunk in graph.stream(
+#     {"messages": [{"role": "user", "content": "classify my emails"}]}
+# ):
+#     pretty_print_messages(chunk)

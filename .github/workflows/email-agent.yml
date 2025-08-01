@@ -33,9 +33,18 @@ jobs:
         echo '${{ secrets.TOKEN1_JSON }}' > token1.json
         echo '${{ secrets.TOKEN2_JSON }}' > token2.json
         
+    - name: Create .env file
+      run: |
+        echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" > .env
+        
+    - name: Debug environment
+      run: |
+        echo "Checking if .env file exists:"
+        ls -la .env
+        echo "Checking environment variables:"
+        echo "OPENAI_API_KEY is set: ${{ env.OPENAI_API_KEY != '' }}"
+        
     - name: Run email agent
-      env:
-        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       run: |
         python run_graph.py
         
@@ -44,4 +53,4 @@ jobs:
       with:
         name: email-agent-results
         path: output_*.json
-        retention-days: 7 
+        retention-days: 7

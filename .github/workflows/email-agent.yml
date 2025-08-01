@@ -11,6 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      USER_EMAILS: ${{ secrets.USER_EMAILS }}
+      TOKEN_DAWSONPOWELL07_GMAIL_COM_JSON: ${{ secrets.TOKEN_DAWSONPOWELL07_GMAIL_COM_JSON }}
+      TOKEN_DQPOWEL_CLEMSON_EDU_JSON: ${{ secrets.TOKEN_DQPOWEL_CLEMSON_EDU_JSON }}
     
     steps:
     - name: Checkout code
@@ -32,13 +35,23 @@ jobs:
         
     - name: Create token files
       run: |
-        echo '${{ secrets.TOKEN1_JSON }}' > token1.json
-        echo '${{ secrets.TOKEN2_JSON }}' > token2.json
+        IFS=',' read -ra EMAILS <<< "$USER_EMAILS"
+        for email in "${EMAILS[@]}"; do
+          safe=$(echo "$email" | tr '@.' '_')
+          var="TOKEN_${safe}_JSON"
+          token=$(printenv "$var")
+          if [ -z "$token" ]; then
+            echo "Missing token for $email ($var)" >&2
+            exit 1
+          fi
+          echo "$token" > "token_${email}.json"
+        done
         
     - name: Debug environment
       run: |
         echo "Checking environment variables:"
         echo "OPENAI_API_KEY is set: ${{ env.OPENAI_API_KEY != '' }}"
+        echo "USER_EMAILS: $USER_EMAILS"
         
     - name: Run email agent
       run: |

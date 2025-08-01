@@ -44,7 +44,7 @@ def main() -> None:
         print("Make sure to set the OPENAI_API_KEY environment variable or add it to your .env file")
         return
 
-    users = ["personal@example.com", "school@example.com"]
+    users = ["dawsonpowell07@gmail.com", "dqpowel@clemson.edu"]
     results = []
     for email in users:
         success = run_for_user(email)

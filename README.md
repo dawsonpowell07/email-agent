@@ -59,10 +59,11 @@ To use Gmail features, you need to set up authentication:
 
 ### Usage
 
-Run the graph for a specific user email:
+Set the `USER_EMAILS` environment variable with a comma‑separated list of email addresses and run the graph:
 
 ```bash
+export USER_EMAILS="user1@example.com,user2@example.com"
 python run_graph.py
 ```
 
-The `State` object now requires a `user_email` value. Credentials for that user are loaded from `token_<email>.json` and cached for future tool calls.
+If `USER_EMAILS` is not set, the default list inside `run_graph.py` is used. The `State` object requires a `user_email` value, and credentials for each user are loaded from `token_<email>.json`.

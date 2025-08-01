@@ -41,10 +41,16 @@ def main() -> None:
 
     if not os.getenv("OPENAI_API_KEY"):
         print("❌ Error: OPENAI_API_KEY environment variable not set")
-        print("Make sure to set the OPENAI_API_KEY environment variable or add it to your .env file")
+        print(
+            "Make sure to set the OPENAI_API_KEY environment variable or add it to your .env file"
+        )
         return
 
-    users = ["dawsonpowell07@gmail.com", "dqpowel@clemson.edu"]
+    users_env = os.getenv("USER_EMAILS")
+    if users_env:
+        users = [e.strip() for e in users_env.split(",") if e.strip()]
+    else:
+        users = ["dawsonpowell07@gmail.com", "dqpowel@clemson.edu"]
     results = []
     for email in users:
         success = run_for_user(email)

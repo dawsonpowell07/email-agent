@@ -1,34 +1,16 @@
 from langchain_core.tools import tool
-from google.oauth2.credentials import Credentials
-import os.path
-
-from google.auth.transport.requests import Request
-from google_auth_oauthlib.flow import InstalledAppFlow
+from typing import Optional
+from utils.auth import get_credentials, set_current_user, get_current_user
 
 
 @tool
-def gmail_authenticate() -> str:
-    """Authenticates with Gmail and return credentials"""
-    SCOPES = [
-        "https://www.googleapis.com/auth/gmail.labels",
-        "https://www.googleapis.com/auth/gmail.modify",
-    ]
+def gmail_authenticate(user_email: Optional[str] = None) -> str:
+    """Authenticate with Gmail for the specified user."""
+    if user_email is None:
+        user_email = get_current_user()
+    if not user_email:
+        return "Error: user email not specified"
 
-    creds = None
-    # The file token.json stores the user's access and refresh tokens, and is
-    # created automatically when the authorization flow completes for the first
-    # time.
-    if os.path.exists("token.json"):
-        creds = Credentials.from_authorized_user_file("token.json", SCOPES)
-    # If there are no (valid) credentials available, let the user log in.
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file("credentials.json", SCOPES)
-            creds = flow.run_local_server(port=0)
-        # Save the credentials for the next run
-        with open("token.json", "w") as token:
-            token.write(creds.to_json())
-
-    return "Gmail authentication successful"
+    set_current_user(user_email)
+    get_credentials(user_email)
+    return f"Gmail authentication successful for {user_email}"

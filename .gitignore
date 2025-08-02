@@ -6,3 +6,4 @@ token2.json
 .langgraph_api
 __pycache__
 .ruff_cache
+*.json

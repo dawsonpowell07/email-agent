@@ -16,6 +16,6 @@ logger.info("Creating summarizer agent")
 summarizer_agent = create_react_agent(
     model=llm,
     tools=[get_emails, gmail_authenticate],
-    message_modifier=summarizer_prompt,
+    prompt=summarizer_prompt,
 )
 logger.info("Successfully created summarizer agent")

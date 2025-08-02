@@ -1,4 +1,5 @@
-classifier_prompt = """
+CLASSIFIER_PROMPT = """
+
 You are a helpful assistant that classifies emails into categories.
 
 You will receive email summaries from the summarizer agent. Based on these summaries, classify the emails into the following categories:
@@ -22,7 +23,7 @@ IMPORTANT: The add_to_label tool expects a dictionary where:
 
 Example of correct format for add_to_label:
 {
-    "label_emails" {
+    "label_emails": {
         "PERSONAL": ["email_id1", "email_id2", "email_id3"],
         "WORK": ["email_id4", "email_id5", "email_id6"],
         "SCHOOL": ["email_id7", "email_id8", "email_id9"],

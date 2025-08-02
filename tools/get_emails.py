@@ -3,6 +3,9 @@ from typing import List, Dict, Any, Optional
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from utils.auth import get_credentials, get_current_user
+from utils.logging import get_logger
+
+logger = get_logger(__name__)
 
 
 @tool
@@ -11,9 +14,11 @@ def get_emails(query: str = "is:unread", user_email: Optional[str] = None) -> Li
     if user_email is None:
         user_email = get_current_user()
     if not user_email:
+        logger.error("User email not specified.")
         return {"error": "User email not specified. Run gmail_authenticate first."}
 
     try:
+        logger.info(f"Retrieving emails for user: {user_email} with query: {query}")
         creds = get_credentials(user_email)
         service = build("gmail", "v1", credentials=creds)
         results = (
@@ -35,6 +40,8 @@ def get_emails(query: str = "is:unread", user_email: Optional[str] = None) -> Li
                 "snippet": msg.get("snippet", ""),
             }
             emails.append(email_data)
+        logger.info(f"Successfully retrieved {len(emails)} emails for user: {user_email}")
         return emails
     except HttpError as error:
+        logger.error(f"An error occurred: {error}")
         return {"error": f"An error occurred: {error}"}

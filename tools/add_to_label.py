@@ -9,7 +9,9 @@ logger = get_logger(__name__)
 
 
 @tool
-def add_to_label(label_emails: Dict[str, List[str]], user_email: Optional[str] = None) -> str:
+def add_to_label(
+    label_emails: Dict[str, List[str]], user_email: Optional[str] = None
+) -> str:
     """Add emails to multiple Gmail labels."""
     if user_email is None:
         user_email = get_current_user()
@@ -38,7 +40,10 @@ def add_to_label(label_emails: Dict[str, List[str]], user_email: Optional[str] =
                     "messageListVisibility": "show",
                 }
                 created_label = (
-                    service.users().labels().create(userId="me", body=label_object).execute()
+                    service.users()
+                    .labels()
+                    .create(userId="me", body=label_object)
+                    .execute()
                 )
                 label_id = created_label["id"]
                 logger.info(f"Successfully created label '{label_name}'")

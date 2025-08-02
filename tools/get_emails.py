@@ -9,7 +9,9 @@ logger = get_logger(__name__)
 
 
 @tool
-def get_emails(query: str = "is:unread", user_email: Optional[str] = None) -> List[Dict[str, Any]]:
+def get_emails(
+    query: str = "is:unread", user_email: Optional[str] = None
+) -> List[Dict[str, Any]]:
     """Retrieve emails from Gmail."""
     if user_email is None:
         user_email = get_current_user()
@@ -22,13 +24,19 @@ def get_emails(query: str = "is:unread", user_email: Optional[str] = None) -> Li
         creds = get_credentials(user_email)
         service = build("gmail", "v1", credentials=creds)
         results = (
-            service.users().messages().list(userId="me", q=query, maxResults=20).execute()
+            service.users()
+            .messages()
+            .list(userId="me", q=query, maxResults=20)
+            .execute()
         )
         messages = results.get("messages", [])
         emails = []
         for message in messages:
             msg = (
-                service.users().messages().get(userId="me", id=message["id"], format="full").execute()
+                service.users()
+                .messages()
+                .get(userId="me", id=message["id"], format="full")
+                .execute()
             )
             headers = msg["payload"]["headers"]
             subject = next((h["value"] for h in headers if h["name"] == "Subject"), "")
@@ -40,7 +48,9 @@ def get_emails(query: str = "is:unread", user_email: Optional[str] = None) -> Li
                 "snippet": msg.get("snippet", ""),
             }
             emails.append(email_data)
-        logger.info(f"Successfully retrieved {len(emails)} emails for user: {user_email}")
+        logger.info(
+            f"Successfully retrieved {len(emails)} emails for user: {user_email}"
+        )
         return emails
     except HttpError as error:
         logger.error(f"An error occurred: {error}")

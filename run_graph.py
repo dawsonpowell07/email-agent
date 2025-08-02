@@ -18,7 +18,10 @@ def run_for_user(user_email: str) -> bool:
         final_state = app.invoke(
             {
                 "messages": [
-                    {"role": "user", "content": f"Process emails for {user_email}"}
+                    {
+                        "role": "user",
+                        "content": f"You are an automated email labeling assistant. Do not ask the user questions. Automatically classify using tools.",
+                    }
                 ],
                 "user_email": user_email,
             }

@@ -3,7 +3,7 @@ name: Email Agent
 on:
   schedule:
     # Run at 9 AM, 2 PM, and 7 PM UTC
-    - cron: '0 9,14,19 * * *'
+    - cron: "0 9,14,19 * * *"
   workflow_dispatch: # Allow manual runs
 
 jobs:
@@ -14,52 +14,54 @@ jobs:
       USER_EMAILS: ${{ secrets.USER_EMAILS }}
       TOKEN_DAWSONPOWELL07_GMAIL_COM_JSON: ${{ secrets.TOKEN_DAWSONPOWELL07_GMAIL_COM_JSON }}
       TOKEN_DQPOWEL_CLEMSON_EDU_JSON: ${{ secrets.TOKEN_DQPOWEL_CLEMSON_EDU_JSON }}
-    
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
-        
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        
-    - name: Create credentials file
-      run: |
-        echo '${{ secrets.GOOGLE_CREDENTIALS }}' > credentials.json
-        
-    - name: Create token files
-      run: |
-        IFS=',' read -ra EMAILS <<< "$USER_EMAILS"
-        for email in "${EMAILS[@]}"; do
-          safe=$(echo "$email" | tr '@.' '_')
-          var="TOKEN_${safe}_JSON"
-          token=$(printenv "$var")
-          if [ -z "$token" ]; then
-            echo "Missing token for $email ($var)" >&2
-            exit 1
-          fi
-          echo "$token" > "token_${email}.json"
-        done
-        
-    - name: Debug environment
-      run: |
-        echo "Checking environment variables:"
-        echo "OPENAI_API_KEY is set: ${{ env.OPENAI_API_KEY != '' }}"
-        echo "USER_EMAILS: $USER_EMAILS"
-        
-    - name: Run email agent
-      run: |
-        python run_graph.py
-        
-    - name: Upload results
-      uses: actions/upload-artifact@v4
-      with:
-        name: email-agent-results
-        path: output_*.json
-        retention-days: 7
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Create credentials file
+        run: |
+          echo '${{ secrets.GOOGLE_CREDENTIALS }}' > credentials.json
+
+      - name: Create token files
+        run: |
+          echo '${{ secrets.TOKEN1_JSON }}' > token1.json
+          echo '${{ secrets.TOKEN2_JSON }}' > token2.json
+          IFS=',' read -ra EMAILS <<< "$USER_EMAILS"
+          for email in "${EMAILS[@]}"; do
+            safe=$(echo "$email" | tr '@.' '_' | tr '[:lower:]' '[:upper:]')
+            var="TOKEN_${safe}_JSON"
+            token=$(printenv "$var")
+            if [ -z "$token" ]; then
+              echo "Missing token for $email ($var)" >&2
+              exit 1
+            fi
+            echo "$token" > "token_${email}.json"
+          done
+
+      - name: Debug environment
+        run: |
+          echo "Checking environment variables:"
+          echo "OPENAI_API_KEY is set: ${{ env.OPENAI_API_KEY != '' }}"
+          echo "USER_EMAILS: $USER_EMAILS"
+
+      - name: Run email agent
+        run: |
+          python run_graph.py
+
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: email-agent-results
+          path: output_*.json
+          retention-days: 7

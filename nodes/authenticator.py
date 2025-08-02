@@ -5,7 +5,7 @@ from utils.logging import get_logger
 logger = get_logger(__name__)
 
 
-def def load_auth(state: State) -> dict:
+def load_auth(state: State) -> dict:
     """Load credentials for the user specified in state."""
     user_email = state["user_email"]
     logger.info(f"Loading auth for user: {user_email}")

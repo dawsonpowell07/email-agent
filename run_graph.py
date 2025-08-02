@@ -20,8 +20,8 @@ def run_for_user(user_email: str) -> bool:
                 "messages": [
                     {
                         "role": "user",
-                        "content": f"You are an automated email labeling assistant. Do not ask the user questions. Automatically classify using tools.",
-                    }
+                        "content": "You are an automated email labeling assistant. Do not ask the user questions. Automatically classify using tools.",
+                    },
                 ],
                 "user_email": user_email,
             }

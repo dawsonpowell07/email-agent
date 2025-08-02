@@ -7,6 +7,7 @@ import os.path
 SCOPES = [
     "https://www.googleapis.com/auth/gmail.labels",
     "https://www.googleapis.com/auth/gmail.modify",
+    "https://www.googleapis.com/auth/spreadsheets",
 ]
 
 _current_user_email: Optional[str] = None
@@ -14,7 +15,7 @@ _credentials_cache: Dict[str, Credentials] = {}
 
 
 def set_current_user(email: str) -> None:
-    """Set the current user email for Gmail operations."""
+    """Set the current user email for Google API operations."""
     global _current_user_email
     _current_user_email = email
 

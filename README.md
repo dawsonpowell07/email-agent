@@ -6,6 +6,7 @@ An intelligent email classification and summarization agent built with LangGraph
 
 - **Email Classification**: Automatically categorizes emails into categories like PERSONAL, WORK, SCHOOL, PROMOTIONAL, etc.
 - **Gmail Integration**: Direct integration with Gmail API for reading and labeling emails
+- **Job Application Tracking**: Detects new job application emails and logs them to a Google Sheet
 - **LangGraph Workflow**: Uses LangGraph for orchestrated email processing
 
 ## Project Structure
@@ -19,6 +20,7 @@ email-agent/
 ├── tools/                 # LangChain tools
 │   ├── get_emails.py      # Tool to retrieve emails from Gmail
 │   ├── add_to_label.py    # Tool to add emails to Gmail labels
+│   ├── add_to_spreadsheet.py # Tool to record job applications in Google Sheets
 │   └── gmail_authenticate.py # Gmail authentication tool
 ├── prompts/               # Prompt templates
 │   ├── classifier_prompt.py
@@ -44,6 +46,8 @@ Create a `.env` file in the project root with your OpenAI API key:
 
 ```
 OPENAI_API_KEY=your_openai_api_key_here
+JOB_SHEET_ID=your_google_sheet_id
+JOB_SHEET_NAME=Sheet1  # optional, defaults to Sheet1
 ```
 
 ### 3. Gmail Authentication

@@ -13,6 +13,18 @@ You will receive email summaries from the summarizer agent. Based on these summa
 - JOB_APPLICATION/STATUS
 
 
+If an email represents a **new job application**, call
+`add_job_app_to_spreadsheet` with a dictionary containing:
+```
+{
+    "company": "Company name",
+    "role": "Role title",
+    "email_id": "<email id>",
+    "date": "YYYY-MM-DD"  # optional
+}
+```
+Call this tool once for each new application before labeling the email.
+
 use the add_to_label tool to add the emails to the appropriate labels.
 make a SINGLE call to add_to_label tool with EVERY EMAIL ID to be labeled
 

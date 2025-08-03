@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import os
 from datetime import datetime
-from typing import Dict, Optional
+from typing import Dict, List, Optional
 
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
@@ -17,14 +17,15 @@ logger = get_logger(__name__)
 
 
 @tool
-def add_job_app_to_spreadsheet(
-    job_info: Dict[str, str], user_email: Optional[str] = None
+def add_job_apps_to_spreadsheet(
+    job_infos: List[Dict[str, str]], user_email: Optional[str] = None
 ) -> str:
-    """Add a job application entry to a Google Sheet.
+    """Add multiple job application entries to a Google Sheet.
 
     Args:
-        job_info: Dictionary containing details about the application. Expected keys
-            are ``company`` and ``role``. ``email_id`` and ``date`` are optional.
+        job_infos: A list of dictionaries, where each dictionary contains
+            details about an application. Expected keys are ``company``,
+            ``role``, and ``date``.
         user_email: Email address whose credentials will be used. Defaults to the
             currently authenticated user.
 
@@ -45,29 +46,42 @@ def add_job_app_to_spreadsheet(
         return "Spreadsheet ID not configured."
 
     try:
-        logger.info("Appending job application to spreadsheet for user: %s", user_email)
+        logger.info(
+            "Appending %d job applications to spreadsheet for user: %s",
+            len(job_infos),
+            user_email,
+        )
         creds = get_credentials(user_email)
         service = build("sheets", "v4", credentials=creds)
 
-        now = datetime.utcnow().isoformat()
-        values = [
-            [
-                job_info.get("company", ""),
-                job_info.get("role", ""),
-                job_info.get("email_id", ""),
-                job_info.get("date", now),
-            ]
-        ]
-        body = {"values": values}
-        range_name = f"{sheet_name}!A:D"
+        rows_to_append = []
+        now = datetime.now().strftime("%Y-%m-%d")
+        for job_info in job_infos:
+            rows_to_append.append(
+                [
+                    job_info.get("company", ""),
+                    job_info.get("role", ""),
+                    job_info.get("date", now),
+                ]
+            )
+
+        body = {"values": rows_to_append}
+        range_name = f"'{sheet_name}'!A:C"
+        logger.debug(f"Using range: {range_name}")
+
         service.spreadsheets().values().append(
             spreadsheetId=spreadsheet_id,
             range=range_name,
             valueInputOption="RAW",
             body=body,
         ).execute()
-        logger.info("Successfully appended job application to sheet.")
-        return "Job application added to spreadsheet."
+
+        logger.info("Successfully appended all job applications to sheet.")
+        return f"{len(job_infos)} job applications added to spreadsheet."
+
     except HttpError as error:
         logger.error("An error occurred: %s", error)
         return f"An error occurred: {error}"
+    except Exception as e:
+        logger.error("An unexpected error occurred: %s", e)
+        return f"An unexpected error occurred: {e}"

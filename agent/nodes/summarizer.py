@@ -1,10 +1,10 @@
 from langgraph.prebuilt import create_react_agent
 from langchain_openai import ChatOpenAI
 from dotenv import load_dotenv
-from tools.get_emails import get_emails
-from tools.gmail_authenticate import gmail_authenticate
-from prompts.summarizer_prompt import summarizer_prompt
-from utils.logging import get_logger
+from agent.tools.get_emails import get_emails
+from agent.tools.gmail_authenticate import gmail_authenticate
+from agent.prompts.summarizer_prompt import summarizer_prompt
+from agent.utils.logging import get_logger
 
 load_dotenv()
 

@@ -1,8 +1,8 @@
 from langgraph.graph import StateGraph, START, END
-from state import State
-from nodes.classifier import classifier_agent
-from nodes.summarizer import summarizer_agent
-from nodes.authenticator import load_auth
+from agent.state import State
+from agent.nodes.classifier import classifier_agent
+from agent.nodes.summarizer import summarizer_agent
+from agent.nodes.authenticator import load_auth
 
 graph_builder = StateGraph(State)
 
@@ -20,12 +20,12 @@ graph_builder.add_edge("classifier", END)
 graph = graph_builder.compile()
 
 
-user_email = "dawsonpowell07@gmail.com"
+# user_email = "dqpowel@clemson.edu"
 
-for chunk in graph.stream(
-    {
-        "messages": [{"role": "user", "content": "classify my emails"}],
-        "user_email": user_email,
-    }
-):
-    print(chunk)
+# for chunk in graph.stream(
+#     {
+#         "messages": [{"role": "user", "content": "classify my emails"}],
+#         "user_email": user_email,
+#     }
+# ):
+#     print(chunk)

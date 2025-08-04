@@ -10,8 +10,8 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from langchain_core.tools import tool
 
-from utils.auth import get_credentials, get_current_user
-from utils.logging import get_logger
+from agent.utils.auth import get_credentials, get_current_user
+from agent.utils.logging import get_logger
 
 logger = get_logger(__name__)
 

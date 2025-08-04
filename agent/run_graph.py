@@ -1,4 +1,4 @@
-from graph import graph
+from agent.graph import graph
 import os
 import json
 import datetime

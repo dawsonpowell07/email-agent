@@ -1,7 +1,7 @@
 from langchain_core.tools import tool
 from typing import Optional
-from utils.auth import get_credentials, set_current_user, get_current_user
-from utils.logging import get_logger
+from agent.utils.auth import get_credentials, set_current_user, get_current_user
+from agent.utils.logging import get_logger
 
 logger = get_logger(__name__)
 

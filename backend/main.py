@@ -1,7 +1,7 @@
 from agent.graph import graph as agent_app
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from typing import Optional, List, Dict
+from typing import Optional
 import traceback
 
 app = FastAPI()

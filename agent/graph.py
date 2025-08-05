@@ -6,10 +6,36 @@ from agent.nodes.authenticator import load_auth
 
 graph_builder = StateGraph(State)
 
+async def call_summarizer_agent(state: State) -> dict[str, any]:
+    messages = state["messages"]
+    user_email = state["user_email"]
+
+    response = await summarizer_agent.ainvoke({
+        state
+    })
+
+    return {
+        "messages": state["messages"] + [response],  # preserve chat history
+    }
+
+
+async def call_classifier_agent(state: State) -> dict[str, any]:
+    messages = state["messages"]
+    user_email = state["user_email"]
+    summaries = state.get("summaries", {})
+
+    response = await classifier_agent.ainvoke({
+        state
+    })
+
+    return {
+        "messages": state["messages"] + [response],  # preserve chat history
+    }
+
 # Nodes
 graph_builder.add_node("auth", load_auth)
-graph_builder.add_node("summarizer", summarizer_agent)
-graph_builder.add_node("classifier", classifier_agent)
+graph_builder.add_node("summarizer", call_summarizer_agent)
+graph_builder.add_node("classifier", call_classifier_agent)
 
 # Edges
 graph_builder.add_edge(START, "auth")

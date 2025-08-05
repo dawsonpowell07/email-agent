@@ -3,7 +3,7 @@ import os
 import json
 import datetime
 from dotenv import load_dotenv
-from utils.auth import set_current_user
+from agent.utils.auth import set_current_user
 
 load_dotenv()
 

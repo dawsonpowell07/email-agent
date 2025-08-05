@@ -6,24 +6,18 @@ from agent.nodes.authenticator import load_auth
 
 graph_builder = StateGraph(State)
 
+
 async def call_summarizer_agent(state: State) -> dict[str, any]:
-    response = await summarizer_agent.ainvoke(
-        state
-    )
-    
-    return {
-        "messages": response
-    }
+    response = await summarizer_agent.ainvoke(state)
+
+    return {"messages": response}
 
 
 async def call_classifier_agent(state: State) -> dict[str, any]:
-    response = await classifier_agent.ainvoke(
-        state
-    )
+    response = await classifier_agent.ainvoke(state)
 
-    return {
-        "messages": response
-    }
+    return {"messages": response}
+
 
 # Nodes
 graph_builder.add_node("auth", load_auth)

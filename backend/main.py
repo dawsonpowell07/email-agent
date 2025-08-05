@@ -6,12 +6,13 @@ import traceback
 
 app = FastAPI()
 
+
 class AgentRequest(BaseModel):
     # Email address for the current user
     user_email: str
     # Cached OAuth token information
     token_info: Optional[str]
-    
+
 
 @app.post("/label")
 async def label(request: AgentRequest):

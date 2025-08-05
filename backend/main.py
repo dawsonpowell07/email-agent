@@ -6,19 +6,27 @@ import traceback
 from starlette.middleware.sessions import SessionMiddleware
 import os
 from fastapi.templating import Jinja2Templates
-from backend.api.auth import auth
+from backend.api.auth import auth, users
+from backend.db.session import Base, engine
 
 app = FastAPI()
 app.include_router(auth.router, prefix="/api/authentication", tags=["auth"])
-app.add_middleware(SessionMiddleware, secret_key=os.getenv("SECRET_KEY", "default_secret_key"))
+app.include_router(users.router, prefix="/api/authentication", tags=["users"])
+app.add_middleware(
+    SessionMiddleware, secret_key=os.getenv("SECRET_KEY", "default_secret_key")
+)
+
+Base.metadata.create_all(bind=engine)
 
 templates = Jinja2Templates(directory="backend/static/")
+
+
 class AgentRequest(BaseModel):
     # Email address for the current user
     user_email: str
     # Cached OAuth token information
     token_info: Optional[str]
-    
+
 
 @app.post("/label")
 async def label(request: AgentRequest):
@@ -35,6 +43,7 @@ async def label(request: AgentRequest):
         print(traceback.format_exc())  # good for debugging
         raise HTTPException(status_code=500, detail="Agent processing failed")
 
+
 @app.get("/")
 async def login(request: Request):
     """
@@ -43,12 +52,13 @@ async def login(request: Request):
     """
     return templates.TemplateResponse("pages/login/login.html", {"request": request})
 
+
 @app.get("/welcome")
 async def welcome(request: Request):
     """
     :param request: The incoming HTTP request containing session data.
     :return: A TemplateResponse object that renders the welcome page with the user's name or 'Guest' if not found.
     """
-    name = request.session.get('user_name', 'Guest')
+    name = request.session.get("user_name", "Guest")
     context = {"request": request, "name": name}
     return templates.TemplateResponse("pages/welcome/welcome.html", context)

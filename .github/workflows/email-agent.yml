@@ -57,7 +57,7 @@ jobs:
 
       - name: Run email agent
         run: |
-          python -m agent.run_graph
+          python3 run_graph.py
 
       - name: Upload results
         uses: actions/upload-artifact@v4

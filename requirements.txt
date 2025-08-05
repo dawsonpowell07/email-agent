@@ -9,3 +9,9 @@ google-auth-oauthlib
 langgraph-cli[inmem]
 fastapi
 pydantic
+pymongo[srv]
+dnspython
+motor
+passlib[bcrypt]
+ruff
+authlib

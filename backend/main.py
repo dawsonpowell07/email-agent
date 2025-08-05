@@ -1,7 +1,8 @@
 from agent.graph import graph as agent_app
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import Optional, List, Dict
+import traceback
 
 app = FastAPI()
 
@@ -14,13 +15,15 @@ class AgentRequest(BaseModel):
 
 @app.post("/label")
 async def label(request: AgentRequest):
-    user_email = request.user_email
-    token_info = request.token_info
-    
     state = {
         "messages": [{"role": "user", "content": "classify my emails"}],
-        "user_email": user_email,
-        "token_info": token_info,
+        "user_email": request.user_email,
+        "token_info": request.token_info,
     }
 
-    _ = await agent_app.ainvoke(state)
+    try:
+        result = await agent_app.ainvoke(state)
+        return result  # or filter response keys
+    except Exception:
+        print(traceback.format_exc())  # good for debugging
+        raise HTTPException(status_code=500, detail="Agent processing failed")
